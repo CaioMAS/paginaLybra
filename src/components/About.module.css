@@ -1,0 +1,172 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.introContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.textSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aboutTitle {
+  font-size: 32px;
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.aboutText {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+.highlightBox {
+  border-left: 4px solid var(--color-accent);
+  padding-left: 20px;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--color-primary);
+  font-weight: 500;
+  margin: 10px 0;
+}
+
+/* Stat Counters */
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.statCard {
+  background-color: white;
+  padding: 30px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-sm);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(46, 48, 146, 0.04);
+}
+
+.statNumber {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.statDesc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Purpose Grid (Mission, Vision, Values) */
+.purposeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+  width: 100%;
+}
+
+.purposeCard {
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-md);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  border: 1px solid rgba(46, 48, 146, 0.04);
+}
+
+.purposeCard:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.iconWrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--color-light-blue);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.purposeCard:hover .iconWrapper {
+  background-color: var(--color-accent);
+  color: white;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.purposeCard h3 {
+  font-size: 20px;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.purposeCard p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+/* Responsiveness */
+@media (max-width: 992px) {
+  .introContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .textSection {
+    text-align: center;
+    align-items: center;
+  }
+
+  .highlightBox {
+    border-left: none;
+    border-top: 2px solid var(--color-accent);
+    border-bottom: 2px solid var(--color-accent);
+    padding: 16px 0;
+    width: 100%;
+  }
+  
+  .purposeGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}

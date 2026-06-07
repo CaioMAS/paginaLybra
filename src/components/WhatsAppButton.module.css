@@ -1,0 +1,173 @@
+.whatsappContainer {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.triggerButton {
+  background-color: #25d366;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s;
+}
+
+.triggerButton:hover {
+  transform: scale(1.1);
+  background-color: #20ba5a;
+}
+
+.triggerButton:active {
+  transform: scale(0.95);
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: var(--color-warning);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 87, 87, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(255, 87, 87, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 87, 87, 0);
+  }
+}
+
+.popover {
+  position: absolute;
+  bottom: 75px;
+  right: 0;
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-lg);
+  width: 280px;
+  overflow: hidden;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+  border: 1px solid rgba(46, 48, 146, 0.08);
+}
+
+.popoverActive {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popoverHeader {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: white;
+  padding: 20px;
+}
+
+.popoverHeader h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.popoverHeader p {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.popoverBody {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--border-radius-md);
+  background-color: #f8f9fc;
+  transition: background-color 0.2s, transform 0.2s;
+  border: 1px solid rgba(46, 48, 146, 0.04);
+}
+
+.contactItem:hover {
+  background-color: #ebf3fc;
+  transform: translateX(4px);
+}
+
+.contactIcon {
+  color: #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.contactRole {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.contactNumber {
+  font-size: 12px;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .whatsappContainer {
+    bottom: 20px;
+    right: 20px;
+  }
+  .popover {
+    width: 260px;
+    right: 0;
+  }
+}
