@@ -33,19 +33,49 @@ export default function Contact() {
     message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API submission
-    setTimeout(() => {
-      setIsSubmitted(true);
-      setFormData({ name: "", email: "", phone: "", company: "", message: "" });
-    }, 600);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/lybraservicos@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          "Nome": formData.name,
+          "E-mail": formData.email,
+          "Telefone / WhatsApp": formData.phone,
+          "Empresa": formData.company || "Não informada",
+          "Mensagem / Escopo da Obra": formData.message,
+          "_subject": "Novo Orçamento - Lybra Empreendimentos",
+          "_template": "box"
+        })
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+      } else {
+        throw new Error("Erro ao enviar mensagem.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Ocorreu um erro ao enviar sua solicitação. Por favor, tente novamente ou fale diretamente conosco pelos telefones.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -187,8 +217,10 @@ export default function Contact() {
                     ></textarea>
                   </div>
 
-                  <button type="submit" className={styles.submitBtn}>
-                    Enviar Solicitação
+                  {error && <p className={styles.errorMessage}>{error}</p>}
+
+                  <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+                    {isSubmitting ? "Enviando..." : "Enviar Solicitação"}
                   </button>
                 </form>
               )}
