@@ -20,6 +20,7 @@ export default function Hero() {
 
   return (
     <section id="hero" className={styles.hero}>
+      <div className={styles.bgImage}></div>
       <div className={styles.content}>
         <span className={styles.tagline}>Lybra Empreendimentos</span>
         <h1 className={styles.title}>
