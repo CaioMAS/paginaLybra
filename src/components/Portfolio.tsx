@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, Compass, Ruler, Hammer } from "lucide-react";
+import Image from "next/image";
+import { MapPin, Compass, Ruler, Hammer, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
 import styles from "./Portfolio.module.css";
 
@@ -11,10 +12,40 @@ interface Project {
   status: "CONCLUÍDO" | "EM ANDAMENTO";
   desc: string;
   services: string[];
+  images?: string[];
 }
 
 export default function Portfolio() {
   const [filter, setFilter] = useState<"ALL" | "CONCLUÍDO" | "EM ANDAMENTO">("ALL");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const openGallery = (project: Project) => {
+    if (project.images && project.images.length > 0) {
+      setSelectedProject(project);
+      setCurrentImageIndex(0);
+      document.body.style.overflow = "hidden";
+    }
+  };
+
+  const closeGallery = () => {
+    setSelectedProject(null);
+    document.body.style.overflow = "auto";
+  };
+
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedProject && selectedProject.images) {
+      setCurrentImageIndex((prev) => (prev + 1) % selectedProject.images!.length);
+    }
+  };
+
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedProject && selectedProject.images) {
+      setCurrentImageIndex((prev) => (prev - 1 + selectedProject.images!.length) % selectedProject.images!.length);
+    }
+  };
 
   const projects: Project[] = [
     {
@@ -102,18 +133,30 @@ export default function Portfolio() {
       services: ["Escavação de valas", "Dutos Canaflex", "Envelopamento de rede", "Bases de concreto", "Reassentamento de paver"]
     },
     {
-      title: "Estruturação de Alambrado - Acelen Renewables",
+      title: "Montagem Industrial - Acelen",
       location: "Acelen Renewables",
       status: "EM ANDAMENTO",
-      desc: "Montagem física de alambrado perimetral de segurança com nivelamento de postes, fixação em blocos de concreto e esticamento de tela metálica.",
-      services: ["Postes metálicos", "Nivelamento e prumo", "Concretagem de bases", "Tela de proteção", "Pintura"]
+      desc: "Serviços de montagens industriais com solda MIG, nivelamento estrutural e montagem de estruturas metálicas executadas na Acelen.",
+      services: ["Montagem Industrial", "Solda MIG", "Estruturas metálicas", "Nivelamento", "Pintura"],
+      images: [
+        "/montagem-industrial-1.jpeg",
+        "/montagem-industrial-2.jpeg",
+        "/montagem-industrial-3.jpeg",
+        "/montagem-industrial-4.jpeg"
+      ]
     },
     {
-      title: "Acabamentos e Revestimentos Especiais - Acelen",
+      title: "Obras Diversas e Serviços de Engenharia - Acelen",
       location: "Acelen Renewables",
       status: "EM ANDAMENTO",
-      desc: "Trabalhos de revestimento interior em edificações industriais, incluindo remoção de epóxi anterior, impermeabilização e instalação de forro PVC.",
-      services: ["Assentamento de porcelanato", "Rodapé PVC", "Impermeabilização", "Soleiras", "Forro PVC estruturado"]
+      desc: "Vários serviços de engenharia civil, manutenção, revitalização e obras diversas executados nas instalações da Acelen.",
+      services: ["Obras Civis", "Serviços de Engenharia", "Revitalização", "Manutenção Industrial", "Acabamentos"],
+      images: [
+        "/obras-diversas-1.jpeg",
+        "/obras-diversas-2.jpeg",
+        "/obras-diversas-3.jpeg",
+        "/obras-diversas-4.jpeg"
+      ]
     }
   ];
 
@@ -122,7 +165,8 @@ export default function Portfolio() {
   );
 
   return (
-    <section id="portfolio" className={`${styles.portfolio} bg-light-blue`}>
+    <>
+      <section id="portfolio" className={`${styles.portfolio} bg-light-blue`}>
       <div className="container">
         {/* Section Header */}
         <ScrollReveal animation="fade-up">
@@ -167,7 +211,10 @@ export default function Portfolio() {
               animation="fade-up"
               delay={((index % 3) + 1) * 100}
             >
-              <div className={styles.card}>
+              <div 
+                className={`${styles.card} ${project.images && project.images.length > 0 ? styles.clickableCard : ''}`}
+                onClick={() => openGallery(project)}
+              >
                 {/* Blueprint graphic header */}
                 <div className={styles.imagePlaceholder}>
                   <span
@@ -180,15 +227,27 @@ export default function Portfolio() {
                     {project.status.toLowerCase()}
                   </span>
                   
-                  {/* Alternating schematic icons to look premium */}
-                  {index % 3 === 0 ? (
-                    <Compass size={40} className={styles.placeholderIcon} />
-                  ) : index % 3 === 1 ? (
-                    <Ruler size={40} className={styles.placeholderIcon} />
+                  {project.images && project.images.length > 0 ? (
+                    <Image
+                      src={project.images[0]}
+                      alt={project.title}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className={styles.projectImage}
+                    />
                   ) : (
-                    <Hammer size={40} className={styles.placeholderIcon} />
+                    <>
+                      {/* Alternating schematic icons to look premium */}
+                      {index % 3 === 0 ? (
+                        <Compass size={40} className={styles.placeholderIcon} />
+                      ) : index % 3 === 1 ? (
+                        <Ruler size={40} className={styles.placeholderIcon} />
+                      ) : (
+                        <Hammer size={40} className={styles.placeholderIcon} />
+                      )}
+                      <span className={styles.placeholderText}>Esboço de Projeto / Planta</span>
+                    </>
                   )}
-                  <span className={styles.placeholderText}>Esboço de Projeto / Planta</span>
                 </div>
 
                 <div className={styles.cardContent}>
@@ -218,5 +277,54 @@ export default function Portfolio() {
         </div>
       </div>
     </section>
+
+      {/* Lightbox Modal */}
+      {selectedProject && selectedProject.images && (
+        <div className={styles.modalOverlay} onClick={closeGallery}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.closeBtn} onClick={closeGallery}>
+              <X size={24} />
+            </button>
+            
+            <div className={styles.modalImageContainer}>
+              <Image 
+                src={selectedProject.images[currentImageIndex]} 
+                alt={`${selectedProject.title} - Imagem ${currentImageIndex + 1}`}
+                fill
+                style={{ objectFit: "contain" }}
+              />
+              
+              {selectedProject.images.length > 1 && (
+                <>
+                  <button className={`${styles.navBtn} ${styles.prevBtn}`} onClick={prevImage}>
+                    <ChevronLeft size={32} />
+                  </button>
+                  <button className={`${styles.navBtn} ${styles.nextBtn}`} onClick={nextImage}>
+                    <ChevronRight size={32} />
+                  </button>
+                </>
+              )}
+            </div>
+            
+            <div className={styles.modalInfo}>
+              <h3 className={styles.modalTitle}>{selectedProject.title}</h3>
+              {selectedProject.images.length > 1 && (
+                <div className={styles.thumbnailContainer}>
+                  {selectedProject.images.map((img, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`${styles.thumbnail} ${idx === currentImageIndex ? styles.thumbnailActive : ''}`}
+                      onClick={() => setCurrentImageIndex(idx)}
+                    >
+                      <Image src={img} alt="thumb" fill style={{ objectFit: "cover" }} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
